@@ -43,14 +43,14 @@ public class BookServiceImplTest {
         person.setId(1);
 
         BookDto bookDto = new BookDto();
-        bookDto.setUserId(1L);
+        bookDto.setUserId(1);
         bookDto.setAuthor("test author");
         bookDto.setTitle("test title");
         bookDto.setPageCount(1000);
 
         BookDto result = new BookDto();
-        result.setId(1L);
-        result.setUserId(1L);
+        result.setId(1);
+        result.setUserId(1);
         result.setAuthor("test author");
         result.setTitle("test title");
         result.setPageCount(1000);
@@ -77,7 +77,7 @@ public class BookServiceImplTest {
 
         //then
         BookDto bookDtoResult = bookService.createBook(bookDto);
-        assertEquals(1L, bookDtoResult.getId());
+        assertEquals(1, bookDtoResult.getId());
     }
 
 

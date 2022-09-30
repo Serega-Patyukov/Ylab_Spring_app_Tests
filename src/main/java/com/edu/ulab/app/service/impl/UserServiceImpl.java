@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
+//@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -37,13 +37,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long id) {
+    public UserDto getUserById(Integer id) {
         // реализовать недстающие методы
         return null;
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Integer id) {
         // реализовать недстающие методы
     }
 }

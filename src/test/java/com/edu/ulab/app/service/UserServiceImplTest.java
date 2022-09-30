@@ -57,7 +57,7 @@ public class UserServiceImplTest {
         savedPerson.setTitle("test title");
 
         UserDto result = new UserDto();
-        result.setId(1L);
+        result.setId(1);
         result.setAge(11);
         result.setFullName("test name");
         result.setTitle("test title");
@@ -73,7 +73,7 @@ public class UserServiceImplTest {
         //then
 
         UserDto userDtoResult = userService.createUser(userDto);
-        assertEquals(1L, userDtoResult.getId());
+        assertEquals(1, userDtoResult.getId());
     }
 
     // update

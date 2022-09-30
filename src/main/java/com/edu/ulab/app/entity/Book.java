@@ -1,7 +1,5 @@
 package com.edu.ulab.app.entity;
 
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +26,10 @@ public class Book {
     @Column(nullable = false)
     private long pageCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    })
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 }

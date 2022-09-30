@@ -6,10 +6,9 @@ import com.edu.ulab.app.mapper.BookMapper;
 import com.edu.ulab.app.repository.BookRepository;
 import com.edu.ulab.app.service.BookService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
+//@Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -38,13 +37,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto getBookById(Long id) {
+    public Iterable<BookDto> getBookById(Integer id) {
         // реализовать недстающие методы
         return null;
     }
 
     @Override
-    public void deleteBookById(Long id) {
+    public void deleteBookById(Integer id) {
         // реализовать недстающие методы
     }
 }

@@ -30,10 +30,9 @@ public class Person {
 //    @Column(nullable = false)
 //    private int count;
 
-    @OneToMany(mappedBy = "person", cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "person",
+            cascade = CascadeType.ALL
+    )
     private Set<Book> bookSet;
 }

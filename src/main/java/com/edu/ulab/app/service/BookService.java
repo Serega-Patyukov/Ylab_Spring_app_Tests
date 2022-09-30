@@ -8,7 +8,7 @@ public interface BookService {
 
     BookDto updateBook(BookDto bookDto);
 
-    BookDto getBookById(Long id);
+    Iterable<BookDto> getBookById(Integer id);
 
-    void deleteBookById(Long id);
+    void deleteBookById(Integer id);
 }
