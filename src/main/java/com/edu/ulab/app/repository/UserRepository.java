@@ -10,7 +10,7 @@ import javax.persistence.LockModeType;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<Person, Long> {
+public interface UserRepository extends CrudRepository<Person, Integer> {
 
     /*
     User has books - book - started - comited status - other logic

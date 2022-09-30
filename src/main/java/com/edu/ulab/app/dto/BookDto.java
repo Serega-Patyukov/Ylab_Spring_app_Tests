@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class BookDto {
-    private Long id;
-    private Long userId;
+    private Integer id;
+    private Integer userId;
     private String title;
     private String author;
     private long pageCount;
