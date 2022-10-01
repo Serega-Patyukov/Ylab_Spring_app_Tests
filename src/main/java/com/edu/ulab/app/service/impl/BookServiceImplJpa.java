@@ -35,8 +35,10 @@ public class BookServiceImplJpa implements BookService {
         Book bookResponse = bookRepository.save(book);
         log.info("Save book : {}", book);
 
-        bookDto.setId(bookResponse.getId());
-        return bookDto;
+        BookDto bookDtoResponse = bookMapper.bookToBookDto(bookResponse);
+        bookDtoResponse.setUserId(bookDto.getUserId());
+
+        return bookDtoResponse;
     }
 
     @Override
@@ -54,10 +56,9 @@ public class BookServiceImplJpa implements BookService {
         book.setPerson(person);
 
         Book bookResponse = bookRepository.save(book);
-        log.info("Save update book : {}", book);
+        log.info("Save update book : {}", bookResponse);
 
-        bookDto.setId(bookResponse.getId());
-        return bookDto;
+        return bookMapper.bookToBookDto(bookResponse);
     }
 
     @Override

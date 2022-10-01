@@ -28,8 +28,7 @@ public class UserServiceImplJpa implements UserService {
         Person personResponse = userRepository.save(person);
         log.info("Save person: {}", personResponse);
 
-        userDto.setId(personResponse.getId());
-        return userDto;
+        return userMapper.personToUserDto(personResponse);
     }
 
     @Override
@@ -45,8 +44,7 @@ public class UserServiceImplJpa implements UserService {
         Person personResponse = userRepository.save(person);
         log.info("Save update person: {}", personResponse);
 
-        userDto.setId(personResponse.getId());
-        return userDto;
+        return userMapper.personToUserDto(personResponse);
     }
 
     @Override
@@ -57,6 +55,7 @@ public class UserServiceImplJpa implements UserService {
 
         UserDto userDto = userMapper.personToUserDto(person);
         log.info("Get id person: {}", id);
+
         return userDto;
     }
 
