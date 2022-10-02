@@ -207,7 +207,7 @@ class BookServiceImplJpaTest {
 
         //when
 
-        when(bookRepository.findAll()).thenReturn((Iterable<Book>) List.of(book0, book1));
+        when(bookRepository.findAll()).thenReturn(List.of(book0, book1));
         when(bookMapper.bookToBookDto(book0)).thenReturn(bookDto0);
         when(bookMapper.bookToBookDto(book1)).thenReturn(bookDto1);
 
@@ -241,6 +241,6 @@ class BookServiceImplJpaTest {
 
         //when
 
-        when(bookRepository.findAll()).thenReturn((Iterable<Book>) List.of(book0, book1));
+        when(bookRepository.findAll()).thenReturn(List.of(book0, book1));
     }
 }
