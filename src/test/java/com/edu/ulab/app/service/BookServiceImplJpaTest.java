@@ -41,7 +41,7 @@ class BookServiceImplJpaTest {
 
     @Test
     @DisplayName("Создание книги. Должно пройти успешно.")
-    void createBook() {
+    void createBook_Test() {
         //given
 
         BookDto bookDto = new BookDto();
@@ -92,7 +92,7 @@ class BookServiceImplJpaTest {
 
     @Test
     @DisplayName("Обновление книги. Должно пройти успешно.")
-    void updateBook() {
+    void updateBook_Test() {
         //given
 
         BookDto bookDto = new BookDto();
@@ -154,7 +154,7 @@ class BookServiceImplJpaTest {
 
     @Test
     @DisplayName("Обновление книги. Не должно пройти успешно.")
-    void updateBookException() {
+    void updateBookException_Test() {
         //given
 
         BookDto bookDto = new BookDto();
@@ -171,7 +171,7 @@ class BookServiceImplJpaTest {
 
     @Test
     @DisplayName("Получение книги. Должно пройти успешно.")
-    void getBookById() {
+    void getBookById_Test() {
         //given
 
         Person person  = new Person();
@@ -219,7 +219,7 @@ class BookServiceImplJpaTest {
 
     @Test
     @DisplayName("Удаление книги. Должно пройти успешно.")
-    void deleteBookById() {
+    void deleteBookById_Test() {
         //given
 
         Person person  = new Person();

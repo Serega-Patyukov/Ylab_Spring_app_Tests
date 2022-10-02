@@ -7,12 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -24,19 +21,19 @@ public class UserServiceImplTemplate implements UserService {
     public UserDto createUser(UserDto userDto) {
 
         final String INSERT_SQL = "INSERT INTO ULAB_EDU.PERSON(ID, FULL_NAME, TITLE, AGE) VALUES (?,?,?,?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int randomId = (int) (Math.random() * 1_000_000) + 1_000_000;
+
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(INSERT_SQL, new String[]{"id"});
-                    ps.setInt(1, (int) (Math.random() * 1_000_000) + 1_000_000);
+                    ps.setInt(1, randomId);
                     ps.setString(2, userDto.getFullName());
                     ps.setString(3, userDto.getTitle());
                     ps.setLong(4, userDto.getAge());
-
                     return ps;
-                }, keyHolder);
+                });
 
-        userDto.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        userDto.setId(randomId);
         log.info("Save person: {}", userDto);
 
         return userDto;

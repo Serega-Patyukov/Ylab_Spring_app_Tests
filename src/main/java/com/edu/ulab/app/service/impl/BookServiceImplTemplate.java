@@ -5,17 +5,11 @@ import com.edu.ulab.app.exception.BadRequestException;
 import com.edu.ulab.app.service.BookService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Objects;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -23,29 +17,24 @@ import java.util.Objects;
 public class BookServiceImplTemplate implements BookService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final JdbcOperations jdbcOperations;
 
     @Override
     public BookDto createBook(BookDto bookDto) {
 
         final String INSERT_SQL = "INSERT INTO ULAB_EDU.BOOK(ID, TITLE, AUTHOR, PAGE_COUNT, PERSON_ID) VALUES (?,?,?,?,?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps =
-                                connection.prepareStatement(INSERT_SQL, new String[]{"id"});
-                        ps.setInt(1, (int) (Math.random() * 1_000_000) + 1_000_000);
-                        ps.setString(2, bookDto.getTitle());
-                        ps.setString(3, bookDto.getAuthor());
-                        ps.setLong(4, bookDto.getPageCount());
-                        ps.setInt(5, bookDto.getUserId());
-                        return ps;
-                    }
-                },
-                keyHolder);
+        int randomId = (int) (Math.random() * 1_000_000) + 1_000_000;
 
-        bookDto.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(INSERT_SQL, new String[]{"id"});
+            ps.setInt(1, randomId);
+            ps.setString(2, bookDto.getTitle());
+            ps.setString(3, bookDto.getAuthor());
+            ps.setLong(4, bookDto.getPageCount());
+            ps.setInt(5, bookDto.getUserId());
+            return ps;
+        });
+
+        bookDto.setId(randomId);
         log.info("Save book : {}", bookDto);
 
         return bookDto;
@@ -54,15 +43,18 @@ public class BookServiceImplTemplate implements BookService {
     @Override
     public BookDto updateBook(BookDto bookDto) {
 
+        ((List<BookDto>) getBookById(bookDto.getUserId())).stream()
+                .filter(bD -> bD.getId().equals(bookDto.getId()))
+                .findAny()
+                .orElseThrow(() -> new BadRequestException("id book not found"));
+
         final String UPDATE_SQL = "UPDATE ULAB_EDU.BOOK SET PERSON_ID = ?, TITLE = ?, AUTHOR = ?, PAGE_COUNT = ? WHERE ID = ?";
-        int amountUpdateBook = jdbcTemplate.update(UPDATE_SQL,
+        jdbcTemplate.update(UPDATE_SQL,
                 bookDto.getUserId(),
                 bookDto.getTitle(),
                 bookDto.getAuthor(),
                 bookDto.getPageCount(),
                 bookDto.getId());
-
-        if (amountUpdateBook == 0) throw  new BadRequestException("id book not found");
 
         log.info("Update book : {}", bookDto);
 
@@ -72,7 +64,7 @@ public class BookServiceImplTemplate implements BookService {
     @Override
     public Iterable<BookDto> getBookById(Integer id) {
         final String SELECT_SQL = "SELECT PERSON_ID, ID, TITLE, AUTHOR, PAGE_COUNT FROM ULAB_EDU.BOOK WHERE PERSON_ID = ?";
-        return jdbcOperations.query(
+        return jdbcTemplate.query(
                 SELECT_SQL,
                 (rs, rowNum) -> {
                     BookDto bookDto = new BookDto();

@@ -39,7 +39,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Создание пользователя. Должно пройти успешно.")
-    void createUser() {
+    void createUser_Test() {
         //given
 
         UserDto userDto = new UserDto();
@@ -78,7 +78,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Обновление пользователя. Должно пройти успешно.")
-    void updateUser() {
+    void updateUser_Test() {
         //given
 
         UserDto userDto = new UserDto();
@@ -126,7 +126,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Обновление пользователя. Не должно пройти успешно.")
-    void updateUserException() {
+    void updateUserException_Test() {
         //given
 
         UserDto userDto = new UserDto();
@@ -143,7 +143,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Получение пользователя. Должно пройти успешно.")
-    void getUserById() {
+    void getUserById_Test() {
         //given
 
         Person getPersonFromBd  = new Person();
@@ -171,7 +171,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Получение пользователя. Не должно пройти успешно.")
-    void getUserByIdException() {
+    void getUserByIdException_Test() {
         //when
 
         when(userRepository.findById(-1)).thenReturn(Optional.empty());
@@ -183,7 +183,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Удаление пользователя. Должно пройти успешно.")
-    void deleteUserById() {
+    void deleteUserById_Test() {
         //given
 
         Person getPersonFromBd  = new Person();
@@ -199,7 +199,7 @@ class UserServiceImplJpaTest {
 
     @Test
     @DisplayName("Удаление пользователя. Не должно пройти успешно.")
-    void deleteUserByIdException() {
+    void deleteUserByIdException_Test() {
         //when
 
         when(userRepository.findById(-1)).thenReturn(Optional.empty());
