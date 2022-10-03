@@ -20,6 +20,8 @@ public class UserServiceImplTemplate implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
 
+        getUserByTitle(userDto.getTitle());
+
         final String INSERT_SQL = "INSERT INTO ULAB_EDU.PERSON(ID, FULL_NAME, TITLE, AGE) VALUES (?,?,?,?)";
         int randomId = (int) (Math.random() * 1_000_000) + 1_000_000;
 
@@ -43,6 +45,7 @@ public class UserServiceImplTemplate implements UserService {
     public UserDto updateUser(UserDto userDto) {
 
         getUserById(userDto.getId());   // Проверим, есть ли пользователь с таким id
+        getUserByTitle(userDto.getTitle());
 
         final String UPDATE_SQL = "UPDATE ULAB_EDU.PERSON SET FULL_NAME = ?, TITLE = ?, AGE = ? WHERE ID = ?";
         jdbcTemplate.update(UPDATE_SQL,
@@ -83,5 +86,17 @@ public class UserServiceImplTemplate implements UserService {
         final String DELETE_SQL = "DELETE FROM ULAB_EDU.PERSON WHERE ID = ?";
         int amountDeletePerson = jdbcTemplate.update(DELETE_SQL, id);
         log.info("Amount delete person on id = " + id + ": {}", amountDeletePerson);
+    }
+
+    public void getUserByTitle(String title) {
+        final String SELECT_SQL = "SELECT ID, FULL_NAME, TITLE, AGE FROM ULAB_EDU.PERSON WHERE TITLE = ?";
+        try {
+            UserDto userDto = jdbcTemplate.queryForObject(
+                    SELECT_SQL,
+                    (rs, rowNum) -> new UserDto(),
+                    title);
+            throw new BadRequestException("Title busy");
+        } catch (IncorrectResultSizeDataAccessException exc) {
+        }
     }
 }

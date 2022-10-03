@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<Person, Integer> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Person p where p.id = :id")
     Optional<Person> findByIdForUpdate(int id);
+
+    Optional<Person> findByTitle(String title);
 }

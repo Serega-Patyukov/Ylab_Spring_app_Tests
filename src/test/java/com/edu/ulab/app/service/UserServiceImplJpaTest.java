@@ -19,6 +19,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
@@ -68,6 +70,7 @@ class UserServiceImplJpaTest {
 
         //when
 
+        when(userRepository.findByTitle(anyString())).thenReturn(Optional.empty());
         when(userMapper.userDtoToPerson(userDto)).thenReturn(personMapper);
         when(userRepository.save(personMapper)).thenReturn(savedPerson);
         when(userMapper.personToUserDto(savedPerson)).thenReturn(result);
@@ -115,6 +118,7 @@ class UserServiceImplJpaTest {
 
         //when
 
+        when(userRepository.findByTitle(anyString())).thenReturn(Optional.empty());
         when(userRepository.findByIdForUpdate(userDto.getId())).thenReturn(Optional.of(getPersonFromDb));
         when(userMapper.userDtoToPerson(userDto)).thenReturn(mapperPerson);
         when(userRepository.save(mapperPerson)).thenReturn(savedPerson);
@@ -216,5 +220,46 @@ class UserServiceImplJpaTest {
     void updatePerson_NullPointerException() {
         assertThatThrownBy(() -> userServiceImplJpa.updateUser(null))
                 .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Попытка обновить пользователя с существующим Title.")
+    void updatePerson_title_BadRequestException() {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setId(1);
+        userDto.setAge(111);
+        userDto.setFullName("test name update");
+        userDto.setTitle("test title update");
+
+        //when
+
+        when(userRepository.findByIdForUpdate(anyInt())).thenReturn(Optional.of(new Person()));
+        when(userRepository.findByTitle(anyString())).thenReturn(Optional.of(new Person()));
+
+        //then
+        assertThatThrownBy(() -> userServiceImplJpa.updateUser(userDto))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Title busy");
+    }
+
+    @Test
+    @DisplayName("Попытка сохранить пользователя с существующим Title.")
+    void savePerson_title_BadRequestException() {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setId(1);
+        userDto.setAge(111);
+        userDto.setFullName("test name update");
+        userDto.setTitle("test title update");
+
+        //when
+
+        when(userRepository.findByTitle(anyString())).thenReturn(Optional.of(new Person()));
+
+        //then
+        assertThatThrownBy(() -> userServiceImplJpa.createUser(userDto))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Title busy");
     }
 }

@@ -9,6 +9,7 @@ import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.service.BookService;
 import com.edu.ulab.app.service.UserService;
 import com.edu.ulab.app.web.request.UserBookRequest;
+import com.edu.ulab.app.web.request.UserRequest;
 import com.edu.ulab.app.web.response.UserBookResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,8 +38,17 @@ public class UserDataFacade {
     }
 
     public UserBookResponse createUserWithBooks(UserBookRequest userBookRequest) {
-        if (userBookRequest.getUserRequest() == null) throw new BadRequestException("Bad request");
         log.info("Got user book create request: {}", userBookRequest);
+
+        UserRequest userRequest = userBookRequest.getUserRequest();
+        if (userRequest == null) throw new BadRequestException("Bad request");
+        boolean validUserResp = userRequest.getFullName() == null || userRequest.getTitle() == null;
+        if (validUserResp) throw new BadRequestException("Bad request");
+
+        boolean validBookResp = userBookRequest.getBookRequests().stream()
+                .filter(Objects::nonNull)
+                .noneMatch(bR -> bR.getAuthor() == null || bR.getTitle() == null);
+        if (!validBookResp) throw new BadRequestException("Bad request");
 
         UserDto userDto = userMapper.userRequestToUserDto(userBookRequest.getUserRequest());
         log.info("Mapped user request: {}", userDto);
@@ -69,8 +79,17 @@ public class UserDataFacade {
     }
 
     public UserBookResponse updateUserWithBooks(UserBookRequest userBookRequest) {
-        if (userBookRequest.getUserRequest() == null) throw new BadRequestException("Bad request");
         log.info("Got user book update request: {}", userBookRequest);
+
+        UserRequest userRequest = userBookRequest.getUserRequest();
+        if (userRequest == null) throw new BadRequestException("Bad request");
+        boolean validUserResp = userRequest.getFullName() == null || userRequest.getTitle() == null;
+        if (validUserResp) throw new BadRequestException("Bad request");
+
+        boolean validBookResp = userBookRequest.getBookRequests().stream()
+                .filter(Objects::nonNull)
+                .noneMatch(bR -> bR.getAuthor() == null || bR.getTitle() == null);
+        if (!validBookResp) throw new BadRequestException("Bad request");
 
         UserDto userDto = userMapper.userRequestToUserDto(userBookRequest.getUserRequest());
         log.info("Mapped user request: {}", userDto);
@@ -100,7 +119,8 @@ public class UserDataFacade {
                 .build();
     }
 
-    public UserBookResponse getUserWithBooks(Integer userId) {        log.info("Got user book get request: {}", userId);
+    public UserBookResponse getUserWithBooks(Integer userId) {
+        log.info("Got user book get request: {}", userId);
 
         UserDto userDto = userService.getUserById(userId);
         log.info("Mapped userDto response: {}", userDto);

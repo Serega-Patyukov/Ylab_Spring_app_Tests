@@ -41,8 +41,15 @@ class UserServiceImplTemplateTest {
 
         UserDto userDto = new UserDto();
         userDto.setId(-1);
+        userDto.setTitle("title");
 
         //when
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(RowMapper.class),
+                anyString()
+        )).thenThrow(new IncorrectResultSizeDataAccessException(1));
 
         when(jdbcTemplate.update(
                 any(PreparedStatementCreator.class)))
@@ -55,14 +62,45 @@ class UserServiceImplTemplateTest {
     }
 
     @Test
+    @DisplayName("Создание пользователя. Не должно пройти успешно.")
+    void createUser_BadRequestException() {
+        //given
+
+        UserDto userDto = new UserDto();
+        userDto.setId(-1);
+        userDto.setTitle("title");
+
+        //when
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(RowMapper.class),
+                anyString()
+        )).thenReturn(new UserDto());
+
+        //then
+
+        assertThatThrownBy(() -> userServiceImplTemplate.createUser(userDto))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Title busy");
+    }
+
+    @Test
     @DisplayName("Обновление пользователя. Должно пройти успешно.")
     void updateUser_Test() {
         //given
 
         UserDto userDto = new UserDto();
         userDto.setId(1);
+        userDto.setTitle("title");
 
         //when
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(RowMapper.class),
+                anyString()
+        )).thenThrow(new IncorrectResultSizeDataAccessException(1));
 
         when(jdbcTemplate.update(
                 anyString(),
@@ -81,6 +119,34 @@ class UserServiceImplTemplateTest {
         //then
 
         userServiceImplTemplate.updateUser(userDto);
+    }
+
+    @Test
+    @DisplayName("Обновление пользователя. Не должно пройти успешно.")
+    void updateUser_BadRequestException() {
+        //given
+
+        UserDto userDto = new UserDto();
+        userDto.setId(-1);
+        userDto.setTitle("title");
+
+        //when
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(RowMapper.class),
+                anyString()
+        )).thenReturn(new UserDto());
+
+        when(jdbcTemplate.queryForObject(
+                anyString(),
+                any(RowMapper.class),
+                anyInt()))
+                .thenReturn(new UserDto());
+
+        //then
+
+        assertThrows(BadRequestException.class, () -> userServiceImplTemplate.updateUser(userDto));
     }
 
     @Test

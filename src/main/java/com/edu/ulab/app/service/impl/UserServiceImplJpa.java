@@ -22,6 +22,10 @@ public class UserServiceImplJpa implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+
+        boolean validTitle = userRepository.findByTitle(userDto.getTitle()).isPresent();
+        if (validTitle) throw new BadRequestException("Title busy");
+
         Person person = userMapper.userDtoToPerson(userDto);
         log.info("Mapped userDto: {}", userDto);
 
@@ -37,6 +41,9 @@ public class UserServiceImplJpa implements UserService {
         Person person = userRepository.findByIdForUpdate(userDto.getId())
                 .orElseThrow(() -> new BadRequestException("id person not found"));
         log.info("Get person from bd: {}", person);
+
+        boolean validTitle = userRepository.findByTitle(userDto.getTitle()).isPresent();
+        if (validTitle) throw new BadRequestException("Title busy");
 
         person = userMapper.userDtoToPerson(userDto);
         log.info("Update person: {}", userDto);
