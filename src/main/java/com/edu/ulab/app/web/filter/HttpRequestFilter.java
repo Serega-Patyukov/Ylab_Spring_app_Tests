@@ -18,6 +18,7 @@ public class HttpRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
+        log.info("----------------------------------------------------------------------------------------------------------------------------");
         String requestId = request.getHeader("rqid");
         MDC.put("requestId", requestId);
         log.info("RequestId : {}", requestId);

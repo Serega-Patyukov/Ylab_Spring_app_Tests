@@ -1,10 +1,13 @@
-package com.edu.ulab.app.dto;
+package com.edu.ulab.app.entity.entityStorage;
 
 import lombok.Data;
 
 @Data
-public class BookDto {
+public class BookEntity {
     private Integer id;
+
+    // ManyToOne
+    // Двух стороння связь.
     private Integer userId;
     private String title;
     private String author;
