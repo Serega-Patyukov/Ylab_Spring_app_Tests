@@ -97,6 +97,7 @@ public class BookServiceImpl implements BookService {
         /*
         Полученный id это id юзера.
          */
+        if (!crudRepository.existsById(id)) throw new NotFoundException("id user entity not found");
 
         List<BookEntity> bookEntityList = ((UserEntity) crudRepository.findById(id).get()).getBookEntityList()
                 .stream()

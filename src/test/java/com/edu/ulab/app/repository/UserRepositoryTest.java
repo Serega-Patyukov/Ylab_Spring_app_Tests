@@ -32,6 +32,40 @@ public class UserRepositoryTest {
         SQLStatementCountValidator.reset();
     }
 
+    @DisplayName("Получить юзера по title. Число select == 1")
+    @Test
+    @Rollback
+    @Sql({"classpath:sql/1_clear_schema.sql",
+            "classpath:sql/2_insert_person_data.sql"
+    })
+    void findByTitle_thenAssertDmlCount() {
+        //Given
+
+        //When
+        Person result = userRepository.findByTitle("reader").get();
+        userRepository.flush();
+
+        //Then
+        assertThat(result.getAge()).isEqualTo(55);
+        assertThat(result.getFullName()).isEqualTo("default uer");
+        assertThat(result.getTitle()).isEqualTo("reader");
+
+        assertSelectCount(1);
+        assertInsertCount(0);
+        assertUpdateCount(0);
+        assertDeleteCount(0);
+    }
+
+    @DisplayName("Попытка получить по title")
+    @Test
+    @Rollback
+    @Sql({"classpath:sql/1_clear_schema.sql"
+    })
+    void findByTitle_NoSuchElementException() {
+        assertThatThrownBy(() -> userRepository.findByTitle("reader").get())
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
     @DisplayName("Сохранить юзера. Число select == 1, insert == 1")
     @Test
     @Rollback

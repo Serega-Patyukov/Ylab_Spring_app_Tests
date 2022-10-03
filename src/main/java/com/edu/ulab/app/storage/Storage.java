@@ -83,7 +83,7 @@ public class Storage implements CrudRepository<UserEntity, Integer>{
 
     @Override
     public Optional<UserEntity> findById(Integer id) {
-        return Optional.of(storageUserEntity.get(id));   // Возвращаем юзера по его id.
+        return Optional.ofNullable(storageUserEntity.get(id));   // Возвращаем юзера по его id.
     }
 
     @Override

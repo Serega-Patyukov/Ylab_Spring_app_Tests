@@ -248,13 +248,24 @@ public class BookServiceImplTest {
         userEntityFronBd.setBookEntityList(List.of(bookEntityFromBd0));
 
         //when
-
         when(crudRepository.existsById(1)).thenReturn(true);
         when(crudRepository.findById(1)).thenReturn(Optional.of(userEntityFronBd));
         when(bookMapper.bookEntityToBookEntity(any(BookEntity.class))).thenReturn(bookEntityFromBd0);
 
         //then
         bookService.deleteBookById(1);
+    }
+
+    @Test
+    @DisplayName("Удаление книги.Не должно пройти успешно.")
+    void deleteBook_NotFoundException() {
+        //when
+        when(crudRepository.existsById(anyInt())).thenReturn(false);
+
+        //then
+        assertThatThrownBy(() -> bookService.deleteBookById(1))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("id user entity not found");
     }
 
     @Test
