@@ -32,7 +32,6 @@ public class BookServiceImpl implements BookService {
 
         if (bookDto == null) throw new BadRequestException("Bad request");
         if (bookDto.getId() < 0) throw new BadRequestException("Bad request");
-        if (!crudRepository.existsById(bookDto.getUserId())) throw new NotFoundException("id user entity not found");
         if (bookDto.getId() != 0 && crudRepository.existsById(-1 * bookDto.getId())) throw new BadRequestException("id book entity busy");
 
         Integer id = (int) (Math.random() * 1_000_000) + 1_000_000;
@@ -59,7 +58,6 @@ public class BookServiceImpl implements BookService {
 
         if (bookDto == null) throw new BadRequestException("Bad request");
         if (bookDto.getId() < 1) throw new BadRequestException("Bad request");
-        if ((bookDto.getUserId() < 1) || !crudRepository.existsById(bookDto.getUserId())) throw new NotFoundException("id user entity not found");
         if (!crudRepository.existsById(-1 * bookDto.getId())) throw new NotFoundException("id book entity not found");
 
         long isBookInUser = ((UserEntity) crudRepository.findById(bookDto.getUserId()).get()).getBookEntityList()
@@ -86,7 +84,6 @@ public class BookServiceImpl implements BookService {
         /*
         Полученный id это id юзера.
          */
-        if (!crudRepository.existsById(id)) throw new NotFoundException("id user entity not found");
 
         return ((UserEntity) crudRepository.findById(id).get()).getBookEntityList().stream()
                 .map(bookEntity -> bookMapper.bookEntityToBookDot(bookEntity))
@@ -100,7 +97,6 @@ public class BookServiceImpl implements BookService {
         /*
         Полученный id это id юзера.
          */
-        if (!crudRepository.existsById(id)) throw new NotFoundException("id user entity not found");
 
         List<BookEntity> bookEntityList = ((UserEntity) crudRepository.findById(id).get()).getBookEntityList()
                 .stream()

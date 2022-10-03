@@ -4,7 +4,6 @@ import com.edu.ulab.app.dto.UserDto;
 import com.edu.ulab.app.entity.entityStorage.UserEntity;
 import com.edu.ulab.app.exception.BadRequestException;
 import com.edu.ulab.app.exception.NotFoundException;
-import com.edu.ulab.app.mapper.BookMapper;
 import com.edu.ulab.app.mapper.UserMapper;
 import com.edu.ulab.app.service.UserService;
 import com.edu.ulab.app.storage.CrudRepository;
