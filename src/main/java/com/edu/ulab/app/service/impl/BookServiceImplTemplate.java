@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-@Service
+//@Service
 @Slf4j
 @AllArgsConstructor
 public class BookServiceImplTemplate implements BookService {

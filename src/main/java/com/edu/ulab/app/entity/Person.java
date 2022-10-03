@@ -27,8 +27,7 @@ public class Person {
     @Column(nullable = false)
     private int age;
 
-//    @Column(nullable = false)
-//    private int count;
+    private int counter;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "person",

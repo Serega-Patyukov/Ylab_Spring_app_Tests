@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 
-@Service
+//@Service
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImplTemplate implements UserService {
