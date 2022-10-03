@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -164,5 +165,12 @@ class UserServiceImplTemplateTest {
         //then
 
         userServiceImplTemplate.deleteUserById(userDto.getId());
+    }
+
+    @Test
+    @DisplayName("Попытка обновить null пользователя.")
+    void updatePerson_NullPointerException() {
+        assertThatThrownBy(() -> userServiceImplTemplate.updateUser(null))
+                .isInstanceOf(NullPointerException.class);
     }
 }

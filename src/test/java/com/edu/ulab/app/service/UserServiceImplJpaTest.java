@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -207,5 +209,12 @@ class UserServiceImplJpaTest {
         //then
 
         assertThrows(BadRequestException.class, () -> userServiceImplJpa.deleteUserById(-1));
+    }
+
+    @Test
+    @DisplayName("Попытка обновить null пользователя.")
+    void updatePerson_NullPointerException() {
+        assertThatThrownBy(() -> userServiceImplJpa.updateUser(null))
+                .isInstanceOf(NullPointerException.class);
     }
 }

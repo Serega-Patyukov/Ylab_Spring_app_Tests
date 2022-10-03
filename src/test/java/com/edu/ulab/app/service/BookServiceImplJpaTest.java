@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -242,5 +243,19 @@ class BookServiceImplJpaTest {
         //when
 
         when(bookRepository.findAll()).thenReturn(List.of(book0, book1));
+    }
+
+    @Test
+    @DisplayName("Попытка обновить null книгу.")
+    void updateBook_NullPointerException() {
+        assertThatThrownBy(() -> bookServiceImplJpa.updateBook(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Попытка сохранить null книгу.")
+    void saveBook_NullPointerException() {
+        assertThatThrownBy(() -> bookServiceImplJpa.createBook(null))
+                .isInstanceOf(NullPointerException.class);
     }
 }

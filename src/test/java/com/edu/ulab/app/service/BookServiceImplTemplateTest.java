@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -173,5 +174,12 @@ class BookServiceImplTemplateTest {
         //then
 
         bookServiceImplTemplate.deleteBookById(bookDto.getId());
+    }
+
+    @Test
+    @DisplayName("Попытка обновить null книгу.")
+    void updateBook_NullPointerException() {
+        assertThatThrownBy(() -> bookServiceImplTemplate.updateBook(null))
+                .isInstanceOf(NullPointerException.class);
     }
 }
